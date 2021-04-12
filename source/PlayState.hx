@@ -61,7 +61,8 @@ class PlayState extends MusicBeatState
 	public static var sicks:Int = 0;
 	public static var grade:String = "A";
 	public static var highestCombo = 0;
-	public static var blurFilter:BlurFilter;
+	private var blurFilter:BlurFilter;
+	private var crossroadsBG:FlxSprite;
 	public static var songPosBG:FlxSprite;
 	public static var songPosBar:FlxBar;
 	public static var rep:Replay;
@@ -154,6 +155,7 @@ class PlayState extends MusicBeatState
 
 	var bgGirls:BackgroundGirls;
 	var wiggleShit:WiggleEffect = new WiggleEffect();
+	var blurShit:BlurEffect;
 
 	var talking:Bool = true;
 	var songScore:Int = 0;
@@ -605,6 +607,7 @@ class PlayState extends MusicBeatState
 			bg.active = false;
 			add(bg);
 
+			crossroadsBG=bg;
 			var stageFront:FlxSprite = new FlxSprite(-350, 300).loadGraphic(Paths.image('BRICK'));
 			stageFront.setGraphicSize(Std.int(stageFront.width * .6));
 			stageFront.updateHitbox();
@@ -613,10 +616,9 @@ class PlayState extends MusicBeatState
 			stageFront.active = false;
 			add(stageFront);
 
-			if(bg.pixels!=null){
-				blurFilter = new BlurFilter(12, 12);
-				bg.pixels.applyFilter(bg.pixels,bg.pixels.rect,new Point(0,0),blurFilter);
-			}
+			blurShit = new BlurEffect(bg.width,bg.height);
+			bg.shader = blurShit.shader;
+
 
 		default:
 
@@ -1901,9 +1903,9 @@ class PlayState extends MusicBeatState
 			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
 			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
 		}
+
 		if(curStage=='crossroads'){
-			blurFilter.blurX = FlxMath.lerp(12, blurFilter.blurX, 0.95);
-			blurFilter.blurY = FlxMath.lerp(12, blurFilter.blurY, 0.95);
+			blurShit.size = FlxMath.lerp(4, blurShit.size, 0.75);
 		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);
@@ -3131,8 +3133,10 @@ class PlayState extends MusicBeatState
 			camHUD.zoom += 0.03;
 		}
 		if(curStage=='crossroads' && curBeat % 4 == 0){
-			blurFilter.blurX=0;
-			blurFilter.blurY=0;
+			/*blurFilter.blurX=0;
+			blurFilter.blurY=0;*/
+			blurShit.size = 0;
+			trace("unblur");
 		}
 
 		iconP1.setGraphicSize(Std.int(iconP1.width + 30));
