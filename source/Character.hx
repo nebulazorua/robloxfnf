@@ -212,6 +212,25 @@ class Character extends FlxSprite
 				addOffset("singLEFT", -30);
 				addOffset("singDOWN", -30, -40);
 				playAnim('idle');
+			case 'noob':
+				tex = Paths.getSparrowAtlas('Noob');
+				frames = tex;
+
+				animation.addByPrefix('idle', 'Noob Idle', 24, false);
+				animation.addByPrefix('singUP', 'noob up', 24, false);
+				animation.addByPrefix('singRIGHT', 'noob right', 24, false);
+				animation.addByPrefix('singDOWN', 'noob down', 24, false);
+				animation.addByPrefix('singLEFT', 'Noob left', 24, false);
+
+				addOffset('idle',0,0);
+				addOffset("singUP", 4, 3);
+				addOffset("singRIGHT", -17, 20);
+				addOffset("singLEFT", 38, 12);
+				addOffset("singDOWN", 0, 1);
+
+				playAnim('idle');
+
+				flipX = true;
 			case 'monster-christmas':
 				tex = Paths.getSparrowAtlas('christmas/monsterChristmas');
 				frames = tex;
