@@ -1905,7 +1905,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if(curStage=='crossroads'){
-			blurShit.size = FlxMath.lerp(4, blurShit.size, 0.75);
+			blurShit.size = FlxMath.lerp(8, blurShit.size, 0.75);
 		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);
