@@ -591,15 +591,17 @@ class PlayState extends MusicBeatState
 
 		case 'crossing-my-road':
 			curStage = 'crossroads';
-			defaultCamZoom = .9;
+			defaultCamZoom = 1.1;
 			var bg:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('CROSSROADS'));
+			bg.setGraphicSize(Std.int(bg.width * .6));
 			bg.antialiasing = true;
 			bg.scrollFactor.set(0.8, 0.8);
 			bg.screenCenter(XY);
+			bg.y += 200;
 			bg.active = false;
 			add(bg);
 
-			var stageFront:FlxSprite = new FlxSprite(-200, 200).loadGraphic(Paths.image('BRICK'));
+			var stageFront:FlxSprite = new FlxSprite(-350, 275).loadGraphic(Paths.image('BRICK'));
 			stageFront.setGraphicSize(Std.int(stageFront.width * .6));
 			stageFront.updateHitbox();
 			stageFront.antialiasing = true;
@@ -773,9 +775,9 @@ class PlayState extends MusicBeatState
 				camPos.x += 600;
 				dad.y += 300;
 			case 'noob':
-				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
 				dad.x += 150;
 				dad.y += 450;
+				camPos.set(dad.getGraphicMidpoint().x+200, dad.getGraphicMidpoint().y);
 			case 'parents-christmas':
 				dad.x -= 500;
 			case 'senpai':
@@ -807,10 +809,10 @@ class PlayState extends MusicBeatState
 				add(fastCar);
 
 			case 'crossroads':
-				boyfriend.x -= 100;
-				gf.y += 250;
-				boyfriend.y += 250;
-				dad.y += 250;
+				boyfriend.x -= 50;
+				gf.y += 350;
+				boyfriend.y += 375;
+				dad.y += 350;
 			case 'mall':
 				boyfriend.x += 200;
 
