@@ -1905,7 +1905,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if(curStage=='crossroads'){
-			blurShit.size = FlxMath.lerp(8, blurShit.size, 0.75);
+			blurShit.size = FlxMath.lerp(blurShit.size, 8, 0.025);
 		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);
@@ -2067,10 +2067,11 @@ class PlayState extends MusicBeatState
 
 						daNote.active = false;
 						daNote.visible = false;
-
-						daNote.kill();
-						notes.remove(daNote, true);
-						daNote.destroy();
+						if(!daNote.isSustainNote){
+							daNote.kill();
+							notes.remove(daNote, true);
+							daNote.destroy();
+						}
 					}
 				});
 			}
