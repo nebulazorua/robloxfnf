@@ -1901,7 +1901,7 @@ class PlayState extends MusicBeatState
 			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
 			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
 		}
-		if(blurFilter!=null){
+		if(curStage=='crossroads'){
 			blurFilter.blurX = FlxMath.lerp(12, blurFilter.blurX, 0.95);
 			blurFilter.blurY = FlxMath.lerp(12, blurFilter.blurY, 0.95);
 		}
@@ -3130,7 +3130,7 @@ class PlayState extends MusicBeatState
 			FlxG.camera.zoom += 0.015;
 			camHUD.zoom += 0.03;
 		}
-		if(blurFilter!=null && curBeat % 4 == 0){
+		if(curStage=='crossroads' && curBeat % 4 == 0){
 			blurFilter.blurX=0;
 			blurFilter.blurY=0;
 		}
