@@ -6,10 +6,14 @@ import WiggleEffect.WiggleEffectType;
 import flixel.FlxBasic;
 import flixel.FlxCamera;
 import flixel.FlxG;
+import flash.filters.BlurFilter;
+import openfl.display.BitmapData;
 import flixel.FlxGame;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import openfl.geom.Point;
 import flixel.FlxState;
+import flash.geom.Rectangle;
 import flixel.FlxSubState;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.effects.FlxTrail;
@@ -57,7 +61,7 @@ class PlayState extends MusicBeatState
 	public static var sicks:Int = 0;
 	public static var grade:String = "A";
 	public static var highestCombo = 0;
-
+	public static var blurFilter:BlurFilter;
 	public static var songPosBG:FlxSprite;
 	public static var songPosBar:FlxBar;
 	public static var rep:Replay;
@@ -601,13 +605,18 @@ class PlayState extends MusicBeatState
 			bg.active = false;
 			add(bg);
 
-			var stageFront:FlxSprite = new FlxSprite(-350, 275).loadGraphic(Paths.image('BRICK'));
+			var stageFront:FlxSprite = new FlxSprite(-350, 300).loadGraphic(Paths.image('BRICK'));
 			stageFront.setGraphicSize(Std.int(stageFront.width * .6));
 			stageFront.updateHitbox();
 			stageFront.antialiasing = true;
 			stageFront.scrollFactor.set(1,1);
 			stageFront.active = false;
 			add(stageFront);
+
+			if(bg.pixels!=null){
+				blurFilter = new BlurFilter(12, 12);
+				bg.pixels.applyFilter(bg.pixels,bg.pixels.rect,new Point(0,0),blurFilter);
+			}
 
 		default:
 
@@ -1892,6 +1901,10 @@ class PlayState extends MusicBeatState
 			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
 			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
 		}
+		if(blurFilter!=null){
+			blurFilter.blurX = FlxMath.lerp(12, blurFilter.blurX, 0.95);
+			blurFilter.blurY = FlxMath.lerp(12, blurFilter.blurY, 0.95);
+		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);
 		FlxG.watch.addQuick("stepShit", curStep);
@@ -2310,9 +2323,6 @@ class PlayState extends MusicBeatState
 			rating.acceleration.y = 550;
 			rating.velocity.y -= FlxG.random.int(140, 175);
 			rating.velocity.x -= FlxG.random.int(0, 10);
-			if(curStage=='crossroads'){
-				rating.y += 200;
-			}
 
 			var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2));
 			comboSpr.screenCenter();
@@ -2320,7 +2330,6 @@ class PlayState extends MusicBeatState
 			comboSpr.y += 200;
 			comboSpr.acceleration.y = 600;
 			comboSpr.velocity.y -= 150;
-
 			comboSpr.velocity.x += FlxG.random.int(1, 10);
 			add(rating);
 
@@ -2335,6 +2344,11 @@ class PlayState extends MusicBeatState
 			{
 				rating.setGraphicSize(Std.int(rating.width * daPixelZoom * 0.7));
 				comboSpr.setGraphicSize(Std.int(comboSpr.width * daPixelZoom * 0.7));
+			}
+
+			if(curStage=='crossroads'){
+				rating.y += 300;
+				comboSpr.y += 300;
 			}
 
 			comboSpr.updateHitbox();
@@ -2376,6 +2390,8 @@ class PlayState extends MusicBeatState
 				numScore.velocity.y -= FlxG.random.int(140, 160);
 				numScore.velocity.x = FlxG.random.float(-5, 5);
 
+				if(curStage=='crossroads')
+					numScore.y += 300;
 				if (combo >= 10 || combo == 0)
 					add(numScore);
 
@@ -3113,6 +3129,10 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.camera.zoom += 0.015;
 			camHUD.zoom += 0.03;
+		}
+		if(blurFilter!=null && curBeat % 4 == 0){
+			blurFilter.blurX=0;
+			blurFilter.blurY=0;
 		}
 
 		iconP1.setGraphicSize(Std.int(iconP1.width + 30));
