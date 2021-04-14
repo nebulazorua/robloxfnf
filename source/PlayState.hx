@@ -2043,9 +2043,11 @@ class PlayState extends MusicBeatState
 						if (SONG.needsVoices)
 							vocals.volume = 1;
 
-						daNote.kill();
-						notes.remove(daNote, true);
-						daNote.destroy();
+						if(!daNote.isSustainNote){
+							daNote.kill();
+							notes.remove(daNote, true);
+							daNote.destroy();
+						}
 					}
 
 					if (daNote.y < -daNote.height && !FlxG.save.data.downscroll || daNote.y >= strumLine.y + 106 && FlxG.save.data.downscroll)
@@ -2067,11 +2069,9 @@ class PlayState extends MusicBeatState
 
 						daNote.active = false;
 						daNote.visible = false;
-						if(!daNote.isSustainNote){
-							daNote.kill();
-							notes.remove(daNote, true);
-							daNote.destroy();
-						}
+						daNote.kill();
+						notes.remove(daNote, true);
+						daNote.destroy();
 					}
 				});
 			}
