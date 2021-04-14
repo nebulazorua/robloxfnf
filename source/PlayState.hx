@@ -2290,7 +2290,7 @@ class PlayState extends MusicBeatState
 					totalNotesHit += 1;
 					trace(totalNotesHit);
 					if (health < 2)
-						health += 0.1;
+						health += 0.05;
 					sicks++;
 				}
 			};
@@ -2930,15 +2930,15 @@ class PlayState extends MusicBeatState
 				{
 					if (!note.isSustainNote)
 					{
-						popUpScore(note.strumTime);
 						combo += 1;
 						if(combo>highestCombo)
 							highestCombo=combo;
+						popUpScore(note.strumTime);
 
 						highComboTxt.text = "Highest Combo: " + highestCombo;
 					}
 					else{
-						health+=.05;
+						health+=.02;
 						totalNotesHit+=1;
 					}
 					switch (note.noteData)
