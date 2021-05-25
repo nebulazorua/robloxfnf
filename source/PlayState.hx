@@ -156,6 +156,7 @@ class PlayState extends MusicBeatState
 	var bgGirls:BackgroundGirls;
 	var wiggleShit:WiggleEffect = new WiggleEffect();
 	var blurShit:BlurEffect;
+	var silhouetteShit:SilhouetteEffect;
 
 	var talking:Bool = true;
 	var songScore:Int = 0;
@@ -618,6 +619,7 @@ class PlayState extends MusicBeatState
 
 			blurShit = new BlurEffect(bg.width,bg.height);
 			bg.shader = blurShit.shader;
+			silhouetteShit = new SilhouetteEffect();
 
 
 		default:
@@ -759,7 +761,10 @@ class PlayState extends MusicBeatState
 			add(boyfriend);
 			add(dad);
 		}else{
-		dad = new Character(100, 100, SONG.player2);
+			dad = new Character(100, 100, SONG.player2);
+			if(SONG.song.toLowerCase()=='crossing-my-road' )
+				dad.shader = silhouetteShit.shader;
+
 
 		camPos = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
@@ -1000,6 +1005,9 @@ class PlayState extends MusicBeatState
 
 		iconP2 = new HealthIcon(SONG.player2, false);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
+
+		if(SONG.song.toLowerCase()=='crossing-my-road' )
+			iconP2.shader = silhouetteShit.shader;
 
 		strumLineNotes.cameras = [camHUD];
 		notes.cameras = [camHUD];
@@ -2013,7 +2021,7 @@ class PlayState extends MusicBeatState
 						daNote.clipRect = swagRect;
 					}
 
-					if (!daNote.mustPress && daNote.wasGoodHit)
+					if (!daNote.mustPress && daNote.wasGoodHit && !daNote.hit)
 					{
 						if (SONG.song != 'Tutorial')
 							camZooming = true;
@@ -2047,6 +2055,8 @@ class PlayState extends MusicBeatState
 							daNote.kill();
 							notes.remove(daNote, true);
 							daNote.destroy();
+						}else{
+							daNote.hit=true;
 						}
 					}
 
@@ -3145,6 +3155,10 @@ class PlayState extends MusicBeatState
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
+
+		if(curBeat==16 && SONG.song.toLowerCase()=='crossing-my-road' ){
+			FlxTween.tween(silhouetteShit, {darkness: 0}, .5);
+		}
 
 		if (curBeat % gfSpeed == 0)
 		{
